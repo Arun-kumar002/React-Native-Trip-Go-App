@@ -1,0 +1,68 @@
+yarn add @react-navigation/native
+
+yarn add --dev tailwindcss@3.3.2
+
+yarn tailwindcss init
+
+yarn add tailwindcss -D
+
+yarn add tailwindcss-react-native
+
+https://www.npmjs.com/package/tailwindcss-react-native
+
+
+yarn add @react-navigation/native-stack
+
+
+yarn add react-native-google-places-autocomplete
+
+import AwesomeAlert from 'react-native-awesome-alerts';
+ 
+export default class App extends Component {
+ 
+  constructor(props) {
+    super(props);
+    this.state = { showAlert: false };
+  };
+ 
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+ 
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
+ 
+  render() {
+    const {showAlert} = this.state;
+ 
+    return (
+      // ... rest of your code here ...
+ 
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Cool Alert"
+          message="I Got a message!"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, cancel"
+          confirmText="Yes, delete it"
+          confirmButtonColor="#008080"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+          }}
+        />
+      </View>
+    );
+  };
+};
