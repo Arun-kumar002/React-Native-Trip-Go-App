@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Card from '../components/Card';
 import { getPlaces } from '../api';
 import { dataEx } from './datas';
-
+import { AntDesign } from '@expo/vector-icons';
 const Discover = () => {
     const navigate = useNavigation();
     const [place, setPlace] = useState({
@@ -19,18 +19,19 @@ const Discover = () => {
 
     const [type, setType] = useState("restaurants")
     const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState(dataEx.data);
+    const [isClicked, setIsClicked] = useState(false);
+    const [data, setData] = useState([]);
     useEffect(() => {
         if (place.placeName.length > 3) {
             async function getPlaceCoordinate() {
                 try {
-                    let places = await fetch(`${global.mapUrl}?access_token=${global.token}`);
+                    let places = await fetch(`${global.mapUrl}/${place.placeName}.json?access_token=${global.token}`);
                     let payload = await places.json();
                     if (payload.features && Array.isArray(payload.features) && payload.features.length > 0) {
                         const features = payload?.features[0];
                         const longitude = features?.geometry?.coordinates[0];
                         const latitude = features?.geometry?.coordinates[1];
-                        let obj = { longitude, latitude }
+                        let obj = { longitude, latitude, placeName: "" }
                         setPlace({ ...place, ...obj });
                     }
                 } catch (error) {
@@ -39,7 +40,7 @@ const Discover = () => {
             }
             getPlaceCoordinate()
         }
-    }, [place.placeName])
+    }, [isClicked])
 
     useLayoutEffect(() => {
         navigate.setOptions({ headerShown: false });
@@ -70,8 +71,13 @@ const Discover = () => {
                     placeholder='Search'
                     className="border-b-2 border-gray-300 pb-1 width-full h-[65%] rounded-sm"
                     onChangeText={(val) => setPlace({ ...place, placeName: val })}
+                    value={place.placeName}
                 />
-                {/* <View className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 to-red-500 shadow-md"></View> */}
+                <View className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 to-red-500 shadow-md">
+                </View>
+                <TouchableOpacity className="absolute right-5" onPress={() => { setIsClicked(!isClicked) }} >
+                    <AntDesign name="search1" size={24} color="#0B646B" />
+                </TouchableOpacity>
             </View>
             {/* menu container */}
             {
